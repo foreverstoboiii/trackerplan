@@ -1,0 +1,175 @@
+/* ===========================
+   Основные стили для body
+============================== */
+body {
+    height: 100%;
+    background-color: #383838;    /* Темный фон */
+    color: #ffffff;               /* Белый текст */
+    font-family: Arial, sans-serif; /* Шрифт по умолчанию */
+}
+
+/* ===========================
+   Стили для панели ввода задачи
+============================== */
+.inputbar {
+    display: flex;               /* Горизонтальный флекс-контейнер */
+    justify-content: center;     /* Центрируем по горизонтали */
+    align-items: center;         /* Центрируем по вертикали */
+    gap: 3px;                   /* Отступы между input и кнопкой */
+}
+
+input {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px; /* Скругление только слева */
+    font-size: 16px;
+}
+
+input:hover {
+    background-color: #fffffff1; /* Светлый фон при наведении */
+}
+
+#setplan {
+    padding: 10px 20px;
+    background-color: #279e67;  /* Зеленая кнопка */
+    color: white;
+    border: none;
+    border-radius: 0 5px 5px 0; /* Скругление только справа */
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#setplan:hover {
+    background-color: #1e6f4a;  /* Темно-зеленый при наведении */
+}
+
+/* ===========================
+   Контейнер для отображения задач
+============================== */
+#habitdisplay {
+    padding-top: 0px;
+    margin: 30px auto;          /* Центр по горизонтали, отступ сверху/снизу */
+    text-align: center;
+    font-size: 40px;            /* Размер текста — но это можно потом изменить, если хочется */
+}
+
+/* ===========================
+   Скрываем стандартный чекбокс
+============================== */
+.checkbox-wrapper .checkbox {
+    display: none;
+}
+
+/* ===========================
+   Контейнер для каждой задачи
+============================== */
+.checkbox-wrapper {
+    display: flex;              /* Горизонтальный флекс */
+    align-items: flex-start;    /* Вертикальное выравнивание по верхнему краю */
+    margin: 0 2%;
+    padding: 12px 16px;
+    gap: 40px;                  /* Отступ между чекбоксом и текстом */
+    cursor: pointer;
+    font-size: 20px;
+    user-select: none;          /* Запрет выделения текста мышкой */
+
+    background-color: #464646;  /* Темный фон */
+    border: 1px solid #797777;  /* Светлая граница */
+    border-radius: 8px;         /* Скругление углов */
+    margin-bottom: 15px;        /* Отступ между задачами */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Легкая тень */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Плавный переход цвета */
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+/* ===========================
+   Кастомный чекбокс (стиль квадратика)
+============================== */
+.custom-checkbox {
+    width: 30px;
+    height: 30px;
+    border: 2px solid #ffffff;
+    border-radius: 4px;
+    margin-right: 10px;
+    position: relative;
+    flex-shrink: 0;            /* Не сжимается в флекс-контейнере */
+}
+
+/* Изменение цвета фона при наведении на задачу */
+.checkbox-wrapper:hover {
+    background-color: #d1d1d185; /* Полупрозрачный светлый фон */
+}
+
+/* ===========================
+   Стили для галочки в чекбоксе (при выборе)
+============================== */
+.checkbox-wrapper .checkbox:checked + .custom-checkbox::after {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 4px;
+    width: 8px;
+    height: 16px;
+    border: solid #00ff37;      /* Зелёная галочка */
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+/* ===========================
+   Стили для темной темы
+============================== */
+body.dark-mode {
+    background-color: #ffffff;  /* Светлый фон */
+    color: rgb(255, 255, 255);  /* Белый текст (можно настроить!) */
+}
+
+body.dark-mode .inputbar input {
+    background-color: #383838;  /* Темный фон инпута */
+    color: #ffffff;             /* Светлый текст */
+    border: 1px solid #ccc;
+}
+
+body.dark-mode .checkbox-wrapper {
+    color: #020202;             /* Тёмный текст */
+    background-color: #e6e6e6;  /* Светлый фон задач */
+    border: 1px solid #d3d3d3;
+}
+
+body.dark-mode .checkbox-wrapper:hover {
+    background-color: #99999985; /* Полупрозрачный серый при наведении */
+}
+
+body.dark-mode .custom-checkbox {
+    border: 2px solid #000000;  /* Чёрная рамка у чекбокса */
+}
+
+/* ===========================
+   Стили кнопки переключения темы
+============================== */
+#themetoggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999;
+    padding: 5px 10px;
+    font-size: 20px;
+    border: solid 1px #797979;
+    border-radius: 2px;
+    background-color: #464646;
+    cursor: pointer;
+}
+
+#themetoggle:hover {
+    background-color: #fffefe23; /* Светлый фон при наведении */
+}
+
+body.dark-mode #themetoggle {
+    background-color: #e6e6e6;
+    color: #020202;
+    border: solid 1px #d3d3d3;
+}
+
+body.dark-mode #themetoggle:hover {
+    background-color: #99999985;
+}
