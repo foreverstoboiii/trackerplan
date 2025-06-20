@@ -26,6 +26,8 @@ input {
     font-size: 16px;
 }
 
+
+
 input:hover {
     background-color: #fffffff1; /* Светлый фон при наведении */
 }
@@ -154,9 +156,9 @@ body.dark-mode .custom-checkbox {
     z-index: 999;
     padding: 5px 10px;
     font-size: 20px;
-    border: solid 1px #797979;
-    border-radius: 2px;
-    background-color: #464646;
+    border: solid 2px #797979;
+    border-radius: 4px;
+    background-color: #46464670;
     cursor: pointer;
 }
 
@@ -165,9 +167,10 @@ body.dark-mode .custom-checkbox {
 }
 
 body.dark-mode #themetoggle {
-    background-color: #e6e6e6;
+    background-color: #ffffff;
     color: #020202;
-    border: solid 1px #d3d3d3;
+    border: solid 2px #d3d3d3;
+    border-radius: 4px;
 }
 
 body.dark-mode #themetoggle:hover {
