@@ -1,93 +1,108 @@
-// Загружаем задачи из localStorage (или создаём пустой массив)
+// ====== Загружаем сохранённые задачи из localStorage ======
+// Если в localStorage ничего нет, создаём пустой массив
 let habits = JSON.parse(localStorage.getItem("habits")) || [];
 
 
-// ====== Добавление новой задачи ======
+// ====== Функция добавления новой задачи ======
 function addHabit() {
-    const input = document.getElementById("plans");
-    const value = input.value.trim();
+    const input = document.getElementById("plans");       // Получаем поле ввода
+    const value = input.value.trim();                     // Берём текст, удаляя пробелы
 
-    if (value === "") return;
+    if (value === "") return;                             // Если пусто — ничего не добавляем
 
-    // Добавляем объект с текстом и состоянием чекбокса
-    habits.push({ text: value, completed: false });
+    // Добавляем новую задачу в массив как объект
+    habits.push({
+        text: value,          // Текст задачи
+        completed: false      // Галочка изначально не стоит
+    });
+
+    // Сохраняем обновлённый массив в localStorage
     localStorage.setItem("habits", JSON.stringify(habits));
 
-    input.value = "";
-    renderHabits();
+    input.value = "";         // Очищаем поле ввода
+    renderHabits();           // Перерисовываем список задач
 }
 
 
-// ====== Отображение всех задач ======
+// ====== Функция отображения всех задач (отрисовка на экране) ======
 function renderHabits() {
-    const container = document.getElementById("habitdisplay");
-    container.innerHTML = "";
+    const container = document.getElementById("habitdisplay"); // Блок, куда выводим задачи
+    container.innerHTML = ""; // Очищаем старое содержимое перед отрисовкой
 
+    // Проходим по каждой задаче и создаём HTML для неё
     habits.forEach((habit, index) => {
         container.innerHTML += `
             <div class="habit-item">  
                 <label class="checkbox-wrapper">
+                    <!-- Чекбокс. Если задача выполнена — ставим галочку -->
                     <input type="checkbox" class="checkbox"
                         ${habit.completed ? "checked" : ""}
                         onchange="toggleCompleted(${index})">
                     <span class="custom-checkbox"></span>
-                    ${habit.text}
+                    ${habit.text} <!-- Показываем текст задачи -->
                 </label>
+
+                <!-- Кнопка удаления -->
                 <button class="delete-button" onclick="deleteHabit(${index})">Delete</button>
             </div>
-            <hr>
+            <hr> <!-- Линия между задачами -->
         `;
     });
 }
 
 
-// ====== Обработка переключения галочки (чекбокса) ======
+// ====== Обработка клика по чекбоксу ======
 function toggleCompleted(index) {
+    // Меняем состояние галочки: если было true — станет false, и наоборот
     habits[index].completed = !habits[index].completed;
+
+    // Сохраняем обновлённый массив в localStorage
     localStorage.setItem("habits", JSON.stringify(habits));
 }
 
 
 // ====== Удаление задачи ======
 function deleteHabit(index) {
-    habits.splice(index, 1);
-    localStorage.setItem("habits", JSON.stringify(habits));
-    renderHabits();
+    habits.splice(index, 1); // Удаляем 1 элемент из массива по индексу
+    localStorage.setItem("habits", JSON.stringify(habits)); // Сохраняем обновлённый список
+    renderHabits(); // Перерисовываем список задач
 }
 
 
-// ====== Обработка клавиши Enter ======
+// ====== Обработка нажатия клавиши Enter ======
 document.getElementById("plans").addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
-        addHabit();
+        addHabit(); // Если нажата клавиша Enter — вызываем функцию добавления
     }
 });
 
 
-// ====== Темная / светлая тема ======
-const togglebutton = document.getElementById('themetoggle');
-const savedTheme = localStorage.getItem('theme');
+// ====== Тёмная / светлая тема ======
+const togglebutton = document.getElementById('themetoggle');      // Кнопка смены темы
+const savedTheme = localStorage.getItem('theme');                 // Проверяем, была ли сохранена тема
 
+// При загрузке страницы — устанавливаем нужную тему
 if (savedTheme === 'dark') {
-    document.body.classList.add('dark-mode');
-    togglebutton.innerHTML = '<i class="fas fa-moon"></i>';
+    document.body.classList.add('dark-mode'); // Включаем тёмную тему
+    togglebutton.innerHTML = '<i class="fas fa-moon"></i>'; // Иконка луны
 } else {
-    document.body.classList.remove('dark-mode');
-    togglebutton.innerHTML = '<i class="fas fa-sun"></i>';
+    document.body.classList.remove('dark-mode'); // Светлая тема
+    togglebutton.innerHTML = '<i class="fas fa-sun"></i>'; // Иконка солнца
 }
 
+// При нажатии на кнопку переключаем тему
 togglebutton.addEventListener('click', function () {
-    document.body.classList.toggle('dark-mode');
+    document.body.classList.toggle('dark-mode'); // Включаем/выключаем класс
 
     if (document.body.classList.contains('dark-mode')) {
         togglebutton.innerHTML = '<i class="fas fa-moon"></i>';
-        localStorage.setItem('theme', 'dark');
+        localStorage.setItem('theme', 'dark'); // Сохраняем тему как "dark"
     } else {
         togglebutton.innerHTML = '<i class="fas fa-sun"></i>';
-        localStorage.setItem('theme', 'light');
+        localStorage.setItem('theme', 'light'); // Сохраняем тему как "light"
     }
 });
 
 
-// ====== Показываем задачи при загрузке страницы ======
-renderHabits();
+// ====== Отображаем задачи при загрузке страницы ======
+renderHabits(); // Это важно: иначе при перезагрузке задачи не появятся
