@@ -1,62 +1,93 @@
-// Функция для добавления новой задачи (хабита)
-function addHabit() {
-    // Получаем input, где пользователь вводит текст задачи
-    const input = document.getElementById("plans");
+// Загружаем задачи из localStorage (или создаём пустой массив)
+let habits = JSON.parse(localStorage.getItem("habits")) || [];
 
-    // Убираем пробелы в начале и конце введённого текста
+
+// ====== Добавление новой задачи ======
+function addHabit() {
+    const input = document.getElementById("plans");
     const value = input.value.trim();
 
-    // Если поле пустое — выходим из функции, ничего не добавляем
     if (value === "") return;
 
-    // Добавляем в контейнер #habitdisplay новую задачу в формате:
-    // div с классом habit-item, внутри label с кастомным чекбоксом и текстом задачи
-    // Используем "+=" чтобы не перезаписывать, а добавлять в конец списка
-    document.getElementById("habitdisplay").innerHTML += `
-        <div class="habit-item">  
-            <label class="checkbox-wrapper">
-                <input type="checkbox" class="checkbox">
-                <span class="custom-checkbox"></span>
-                ${value}  <!-- Здесь выводим текст задачи -->
-            </label>
-        </div>
-        <hr>  <!-- Разделительная линия между задачами -->
-    `;
+    // Добавляем объект с текстом и состоянием чекбокса
+    habits.push({ text: value, completed: false });
+    localStorage.setItem("habits", JSON.stringify(habits));
 
-    // Очищаем поле ввода после добавления
     input.value = "";
+    renderHabits();
 }
 
-// ========== Кнопка переключения темы (светлая/тёмная) ==========
 
-// Получаем кнопку по id
+// ====== Отображение всех задач ======
+function renderHabits() {
+    const container = document.getElementById("habitdisplay");
+    container.innerHTML = "";
+
+    habits.forEach((habit, index) => {
+        container.innerHTML += `
+            <div class="habit-item">  
+                <label class="checkbox-wrapper">
+                    <input type="checkbox" class="checkbox"
+                        ${habit.completed ? "checked" : ""}
+                        onchange="toggleCompleted(${index})">
+                    <span class="custom-checkbox"></span>
+                    ${habit.text}
+                </label>
+                <button class="delete-button" onclick="deleteHabit(${index})">Delete</button>
+            </div>
+            <hr>
+        `;
+    });
+}
+
+
+// ====== Обработка переключения галочки (чекбокса) ======
+function toggleCompleted(index) {
+    habits[index].completed = !habits[index].completed;
+    localStorage.setItem("habits", JSON.stringify(habits));
+}
+
+
+// ====== Удаление задачи ======
+function deleteHabit(index) {
+    habits.splice(index, 1);
+    localStorage.setItem("habits", JSON.stringify(habits));
+    renderHabits();
+}
+
+
+// ====== Обработка клавиши Enter ======
+document.getElementById("plans").addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+        addHabit();
+    }
+});
+
+
+// ====== Темная / светлая тема ======
 const togglebutton = document.getElementById('themetoggle');
-
-// Получаем из localStorage сохранённую тему (если есть)
 const savedTheme = localStorage.getItem('theme');
 
-// При загрузке страницы устанавливаем тему, если она сохранена
 if (savedTheme === 'dark') {
-    document.body.classList.add('dark-mode'); // Включаем класс для темной темы
-    togglebutton.innerHTML = '<i class="fas fa-moon"></i>'; // Показываем иконку луны
+    document.body.classList.add('dark-mode');
+    togglebutton.innerHTML = '<i class="fas fa-moon"></i>';
 } else {
-    // Если темы нет или она светлая
-    document.body.classList.remove('dark-mode'); // Убираем класс темной темы
-    togglebutton.innerHTML = '<i class="fas fa-sun"></i>'; // Показываем иконку солнца
+    document.body.classList.remove('dark-mode');
+    togglebutton.innerHTML = '<i class="fas fa-sun"></i>';
 }
 
-// Добавляем обработчик клика на кнопку переключения темы
 togglebutton.addEventListener('click', function () {
-    // Переключаем класс dark-mode у body
     document.body.classList.toggle('dark-mode');
 
     if (document.body.classList.contains('dark-mode')) {
-        // Если сейчас темная тема активна
-        togglebutton.innerHTML = '<i class="fas fa-moon"></i>'; // Ставим иконку луны
-        localStorage.setItem('theme', 'dark'); // Сохраняем выбор в localStorage
+        togglebutton.innerHTML = '<i class="fas fa-moon"></i>';
+        localStorage.setItem('theme', 'dark');
     } else {
-        // Если сейчас светлая тема
-        togglebutton.innerHTML = '<i class="fas fa-sun"></i>'; // Ставим иконку солнца
-        localStorage.setItem('theme', 'light'); // Сохраняем выбор в localStorage
+        togglebutton.innerHTML = '<i class="fas fa-sun"></i>';
+        localStorage.setItem('theme', 'light');
     }
 });
+
+
+// ====== Показываем задачи при загрузке страницы ======
+renderHabits();
