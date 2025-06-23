@@ -45,7 +45,7 @@ function renderHabits() {
                 <!-- Кнопка удаления -->
                 <button class="delete-button" onclick="deleteHabit(${index})">Delete</button>
             </div>
-            <hr> <!-- Линия между задачами -->
+             <!-- Линия между задачами -->
         `;
     });
 }
